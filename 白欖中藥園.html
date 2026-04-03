@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>白欖創作遊戲｜中藥園・叮板卜魚</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(145deg, #fef5e7 0%, #f9e5c1 100%);
+            font-family: 'Segoe UI', 'Noto Sans CJK TC', 'PingFang HK', 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #2d3e2b;
+        }
+        .game-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #fffef7;
+            border-radius: 56px;
+            box-shadow: 0 20px 35px rgba(100, 60, 10, 0.2);
+            overflow: hidden;
+            padding: 20px 25px 35px;
+            border: 1px solid #ffdd99;
+        }
+        h1 {
+            font-size: 2.2rem;
+            text-align: center;
+            margin: 0 0 5px 0;
+            color: #c97e2c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        h1 small {
+            font-size: 0.8rem;
+            background: #f3d382;
+            padding: 5px 12px;
+            border-radius: 40px;
+            color: #3b2a1f;
+        }
+        .sub {
+            text-align: center;
+            font-style: italic;
+            color: #a57242;
+            margin-bottom: 20px;
+            border-bottom: 2px dashed #ffdd99;
+            display: inline-block;
+            width: auto;
+            margin-left: auto;
+            margin-right: auto;
+            padding-bottom: 6px;
+        }
+        .two-columns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+        .control-panel {
+            flex: 0.9;
+            min-width: 240px;
+            background: #fdf8ed;
+            border-radius: 40px;
+            padding: 18px 16px;
+            box-shadow: inset 0 0 0 1px #fff9e8, 0 8px 18px rgba(0,0,0,0.05);
+        }
+        .creation-area {
+            flex: 3;
+            min-width: 420px;
+        }
+        .card {
+            background: white;
+            border-radius: 32px;
+            padding: 16px 18px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 12px rgba(0,0,0,0.05);
+            border: 1px solid #ffe0b5;
+        }
+        .card h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.4rem;
+            color: #b4642c;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-left: 8px solid #e7b56a;
+            padding-left: 12px;
+        }
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 12px 0;
+        }
+        .btn {
+            background: #f1e2c9;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #4a3a28;
+            cursor: pointer;
+            transition: 0.1s linear;
+            box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+        }
+        .btn-primary {
+            background: #d9a13b;
+            color: white;
+            box-shadow: 0 4px 0 #7e4a1a;
+        }
+        .btn-warning {
+            background: #e7b874;
+            color: #2d2b1f;
+        }
+        .btn-sm {
+            padding: 5px 12px;
+            font-size: 0.8rem;
+        }
+        .btn-icon {
+            background: #ffe1a0;
+            font-size: 1rem;
+        }
+        .btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        select, input, textarea {
+            background: #fff6ea;
+            border: 1px solid #e7c28e;
+            border-radius: 40px;
+            padding: 8px 14px;
+            font-size: 0.9rem;
+        }
+        .sentences-list {
+            background: #fef7e9;
+            border-radius: 32px;
+            padding: 12px;
+            max-height: 560px;
+            overflow-y: auto;
+        }
+        .sentence-item {
+            background: white;
+            margin-bottom: 20px;
+            border-radius: 28px;
+            padding: 14px 16px;
+            border-left: 12px solid #f3bc6e;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+        .sentence-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .sentence-num {
+            font-weight: bold;
+            background: #f3dbc0;
+            padding: 2px 12px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+        }
+        .rhyme-badge {
+            font-size: 0.7rem;
+            background: #fce2b4;
+            border-radius: 20px;
+            padding: 2px 10px;
+        }
+        .sentence-input {
+            width: 100%;
+            padding: 10px 14px;
+            font-size: 1rem;
+            border: 2px solid #f1d5aa;
+            border-radius: 40px;
+            font-family: inherit;
+            background: #fffbf2;
+            resize: vertical;
+        }
+        .sentence-stats {
+            font-size: 0.7rem;
+            color: #a7692a;
+            margin-top: 6px;
+            padding-left: 10px;
+            background: #fff2e2;
+            border-radius: 30px;
+            display: inline-block;
+            padding: 4px 12px;
+        }
+        .inline-buttons {
+            margin-top: 12px;
+            border-top: 1px dashed #ffe0b0;
+            padding-top: 10px;
+        }
+        .wordbank-title, .chenzi-title {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: #b4642c;
+            margin: 8px 0 5px 0;
+        }
+        .tempo-area {
+            background: #e7d9be;
+            border-radius: 40px;
+            padding: 18px;
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        .fish-btn {
+            background: #b97f44;
+            border: none;
+            font-size: 1.3rem;
+            padding: 12px 25px;
+            border-radius: 60px;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 6px 0 #5e3a1a;
+            cursor: pointer;
+            transition: 0.05s linear;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .fish-btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 #5e3a1a;
+        }
+        .check-result {
+            background: #f7e6cf;
+            padding: 12px;
+            border-radius: 28px;
+            margin-top: 15px;
+            font-size: 0.85rem;
+        }
+        footer {
+            text-align: center;
+            font-size: 0.7rem;
+            margin-top: 20px;
+            color: #ad8a60;
+        }
+        .chenzi-def {
+            background: #f4e5d2;
+            border-radius: 20px;
+            padding: 8px 12px;
+            font-size: 0.75rem;
+            margin-top: 8px;
+            color: #7b4a2a;
+        }
+    </style>
+</head>
+<body>
+<div class="game-container">
+    <h1>🌿白欖中藥園🪴</h1>
+    <div style="text-align:center"><span class="sub">🎵 可以使用以下的AI 詞語銀行協助／自行輸入，創作白欖 | 雙數句+尾句押韻 | 完成後把創作的白欖抄在工作紙上並把叮板放在合適的位置 🎵</span></div>
+
+    <div class="two-columns">
+        <!-- 左側控制區：藥材主題、韻腳、檢查等 -->
+        <div class="control-panel">
+            <div class="card">
+                <h3>🌿 揀藥材主題</h3>
+                <select id="herbSelect" style="width:100%; margin-bottom:12px">
+                    <option value="陳皮">🍊 陳皮 (理氣健脾)</option>
+                    <option value="沉香">🪵 沉香 (行氣止痛)</option>
+                    <option value="菊花">🌼 菊花 (清熱明目)</option>
+                    <option value="枸杞子">🔴 枸杞子 (滋補肝腎)</option>
+                    <option value="百合">⚪ 百合 (潤肺安神)</option>
+                    <option value="艾草">🌿 艾草 (溫經祛濕)</option>
+                    <option value="沙参">🍂 沙參 (養陰清肺)</option>
+                    <option value="蓮子">🪷 蓮子 (清心健脾)</option>
+                </select>
+                <div id="herbHint" class="check-result" style="background:#fff0df; margin-top:5px;">✨ 揀咗藥材，每句下方詞語銀行會自動更新！</div>
+            </div>
+
+            <div class="card">
+                <h3>🎵 韻腳設定</h3>
+                <select id="rhymeSelect" style="width:100%">
+                    <option value="ong">🎶 ong 韻 (香、方、光、黃、長、強)</option>
+                    <option value="ou">🎶 ou 韻 (好、到、寶、老、早、高)</option>
+                    <option value="aai">🎶 aai 韻 (快、帶、大、晒、怪、界)</option>
+                    <option value="in">🎶 in 韻 (鮮、天、見、蓮、前、先)</option>
+                    <option value="aan">🎶 aan 韻 (山、晚、散、還、班、慢)</option>
+                    <option value="ang">🎶 ang 韻 (等、登、能、朋、燈、增)</option>
+                </select>
+                <div class="button-group" style="margin-top:15px;">
+                    <button id="checkWorkBtn" class="btn btn-primary">✅ 檢查作品</button>
+                    <button id="loadExampleBtn" class="btn btn-warning">📜 示例模板</button>
+                </div>
+            </div>
+            <div class="chenzi-def">
+                <strong>📖 襯字定義</strong><br>
+                基礎句式(3/5/7字)外加嘅虛字/語氣詞，這類字詞不占白欖的主節拍，用於增加語氣、描摹情態或調節格律，使句式更靈活、口語化，不計入規定字數。最佳位置：句中或句首，令節奏更活潑！例如「百合呀真清香」中的「呀」。
+            </div>
+        </div>
+
+        <!-- 右側：逐句創作區域，每句下方自帶詞語銀行和襯字按鈕 -->
+        <div class="creation-area">
+            <div class="card">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; margin-bottom:12px;">
+                    <h3 style="margin:0">✍️ 逐句創作</h3>
+                    <button id="addSentenceBtn" class="btn btn-sm">➕ 加一句</button>
+                </div>
+                <div id="sentencesContainer" class="sentences-list"></div>
+                <div class="check-result" style="margin-top:12px;">
+                    💡 規則：第2、4、6...句(雙數句) & 最後一句 → 必須押韻 (選定韻腳)<br>
+                    🧧 襯字唔計入字數，系統會自動過濾襯字檢查主幹字數。
+                </div>
+            </div>
+            <div class="card">
+                <h3>📜 完成版白欖</h3>
+                <div id="finalText" style="background:#efe2cc; padding:15px; border-radius:28px; font-family: monospace; white-space: pre-wrap; min-height: 80px; font-size:1rem;">💬 逐句創作後，會自動合成白欖...</div>
+            </div>
+            <!-- 叮板區文字已優化，卜魚按鈕無圖案，節拍器錯誤已修復 -->
+            <div class="tempo-area">
+                <div><strong>🥁 叮板區・卜魚數白欖</strong><br>㩒一下「卜魚」跟住拍子讀白欖，試一試邊一個板嘅位置合適且正確。</div>
+                <div style="display:flex; gap:15px; align-items:center;">
+                    <button id="fishButton" class="fish-btn">卜魚</button>
+                    <div>
+                        <button id="metronomeStart" class="btn btn-primary">🔁 自動節拍</button>
+                        <button id="metronomeStop" class="btn">⏹️ 停</button>
+                        <input type="range" id="bpmSlider" min="50" max="130" value="85" style="width:100px;">
+                        <span id="bpmValue">85 BPM</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>🎼 每句下方都有詞語銀行 (跟藥材主題) 同襯字按鈕，點擊即可插入當前句子。自由輸入 + 輔助點選，創作更輕鬆！</footer>
+</div>
+
+<script>
+    // ---------- 藥材詞庫 ----------
+    const herbVocab = {
+        "陳皮": ["陳皮", "果皮", "理氣", "健脾", "化痰", "陳年", "香氣", "老陳皮", "驅寒", "暖胃", "功效好", "順氣", "消滯"],
+        "沉香": ["沉香", "降氣", "納氣", "止痛", "珍貴", "香氣醇", "定驚", "安神", "暖腎", "行氣", "藥中寶", "舒心"],
+        "菊花": ["菊花", "清熱", "明目", "降火", "甘香", "花開", "明亮眼", "散風", "解毒", "秋菊", "淡雅", "護目"],
+        "枸杞子": ["枸杞子", "滋補", "養肝", "明目", "紅寶石", "甜絲絲", "補腎", "益精", "護眼", "養生寶", "強身"],
+        "百合": ["百合", "潤肺", "安神", "清心", "寧靜", "甘甜", "止咳", "養陰", "舒眠", "如玉", "淨心"],
+        "艾草": ["艾草", "溫經", "祛濕", "驅寒", "艾香", "暖宮", "辟邪", "灸草", "祛風", "陽氣", "保健"],
+        "沙参": ["沙參", "養陰", "清肺", "化痰", "益氣", "潤燥", "沙蔘", "補虛", "止咳", "清潤", "生津"],
+        "蓮子": ["蓮子", "清心", "安神", "健脾", "養胃", "蓮香", "去芯", "補脾", "固精", "養心", "白玉"],
+    };
+    const generalWords = ["有益", "真係好", "好健康", "保平安", "暖身心", "最合時", "養生方", "功效強", "老友記", "精神爽", "笑呵呵", "人人讚", "常服樂"];
+
+    // ----- 襯字列表 -----
+    const CHENZI_LIST = ["呀", "呢", "那麼", "我嘅", "我哋", "你嘅", "啦", "咯", "亦都", "仲有", "真係", "確係", "啊", "咁樣", "而且", "雖然"];
+    
+    // 過濾襯字函數
+    function removeChenzi(text) {
+        let result = text;
+        const sorted = [...CHENZI_LIST].sort((a,b) => b.length - a.length);
+        for (let cz of sorted) {
+            const regex = new RegExp(cz, 'g');
+            result = result.replace(regex, '');
+        }
+        result = result.replace(/[，,。？!；;：""''、\s]/g, '');
+        return result;
+    }
+
+    function getCoreWordCount(sentenceText) {
+        const withoutChenzi = removeChenzi(sentenceText);
+        const chineseChars = withoutChenzi.match(/[\u4e00-\u9fa5]/g);
+        return chineseChars ? chineseChars.length : 0;
+    }
+
+    function getCoreLastChar(sentenceText) {
+        const withoutChenzi = removeChenzi(sentenceText);
+        const chineseChars = withoutChenzi.match(/[\u4e00-\u9fa5]/g);
+        if (!chineseChars || chineseChars.length === 0) return '';
+        return chineseChars[chineseChars.length - 1];
+    }
+
+    const rhymeDict = {
+        "ong": ["香", "方", "光", "黃", "鄉", "長", "場", "霜", "傷", "雙", "陽", "強", "腸", "康"],
+        "ou": ["好", "到", "寶", "老", "早", "高", "操", "道", "抱", "報", "惱", "曹", "豪", "刀"],
+        "aai": ["快", "帶", "大", "晒", "怪", "拜", "界", "賴", "太", "街", "鞋", "買", "賣"],
+        "in": ["鮮", "天", "見", "蓮", "前", "先", "邊", "年", "田", "連", "堅", "仙", "綿"],
+        "aan": ["山", "晚", "散", "還", "班", "顏", "間", "慢", "關", "彎", "患", "幻"],
+        "ang": ["等", "登", "能", "朋", "燈", "增", "曾", "盟", "恒", "騰", "崩", "層"]
+    };
+
+    let sentences = [
+        { text: "陳皮香氣靚", wordCount: 5 },
+        { text: "化痰又暖胃", wordCount: 5 }
+    ];
+    let activeSentenceIdx = 0;
+
+    const container = document.getElementById('sentencesContainer');
+    const finalTextDiv = document.getElementById('finalText');
+    const herbSelect = document.getElementById('herbSelect');
+    const rhymeSelect = document.getElementById('rhymeSelect');
+
+    function updateFinalText() {
+        let content = sentences.map((s, i) => `句${i+1}：${s.text}`).join('\n');
+        finalTextDiv.innerText = content || "（尚未創作）";
+    }
+
+    function updateSentenceStats(idx) {
+        const statSpan = document.getElementById(`stat-${idx}`);
+        if (!statSpan) return;
+        const sent = sentences[idx];
+        const coreCount = getCoreWordCount(sent.text);
+        const required = sent.wordCount;
+        const statusColor = coreCount === required ? '✅' : (coreCount > required ? '⚠️多襯字?' : '❌不足');
+        statSpan.innerText = `${statusColor} 主幹字數: ${coreCount} / ${required} 字 (襯字已過濾)`;
+    }
+
+    function getCurrentVocab() {
+        const herb = herbSelect.value;
+        return [...(herbVocab[herb] || []), ...generalWords];
+    }
+
+    function renderSentenceList() {
+        container.innerHTML = '';
+        const currentVocab = getCurrentVocab();
+        const currentRhyme = rhymeSelect.value;
+        
+        sentences.forEach((sent, idx) => {
+            const isEven = (idx+1) % 2 === 0;
+            const isLast = (idx === sentences.length-1);
+            const needRhyme = isEven || isLast;
+            const rhymeMsg = needRhyme ? `🔔 需押韻 (${currentRhyme}韻)` : "🟢 可不押韻";
+            const coreCount = getCoreWordCount(sent.text);
+            const required = sent.wordCount;
+            const statusColor = coreCount === required ? '✅' : (coreCount > required ? '⚠️多襯字?' : '❌不足');
+            const statText = `${statusColor} 主幹字數: ${coreCount} / ${required} 字 (襯字已過濾)`;
+            
+            const div = document.createElement('div');
+            div.className = 'sentence-item';
+            div.id = `sentence-item-${idx}`;
+            div.innerHTML = `
+                <div class="sentence-header">
+                    <span class="sentence-num">第${idx+1}句</span>
+                    <span class="rhyme-badge">${rhymeMsg}</span>
+                    <div>
+                        <select class="wordcount-select" data-idx="${idx}" style="margin-right:6px">
+                            <option value="3" ${sent.wordCount === 3 ? 'selected' : ''}>三字句(3字)</option>
+                            <option value="5" ${sent.wordCount === 5 ? 'selected' : ''}>五字句(5字)</option>
+                            <option value="7" ${sent.wordCount === 7 ? 'selected' : ''}>七字句(7字)</option>
+                        </select>
+                        <button class="btn btn-sm btn-icon del-sentence" data-idx="${idx}">🗑️ 刪句</button>
+                    </div>
+                </div>
+                <textarea rows="2" class="sentence-input" data-idx="${idx}" placeholder="請輸入白欖句子，可加襯字『呀、呢、啦…』喺句中，唔會計入字數">${escapeHtml(sent.text)}</textarea>
+                <div class="sentence-stats" id="stat-${idx}">📏 ${statText}</div>
+                <div class="inline-buttons">
+                    <div class="wordbank-title">📖 詞語銀行 (${herbSelect.value})</div>
+                    <div class="button-group vocab-group" data-idx="${idx}"></div>
+                    <div class="chenzi-title">🎤 襯字區 (加強語氣/連接句子)</div>
+                    <div class="button-group chenzi-group" data-idx="${idx}"></div>
+                </div>
+            `;
+            container.appendChild(div);
+            
+            const vocabGroup = div.querySelector(`.vocab-group`);
+            currentVocab.forEach(word => {
+                const btn = document.createElement('button');
+                btn.className = 'btn btn-sm';
+                btn.innerText = word;
+                btn.onclick = () => insertToSentence(idx, word);
+                vocabGroup.appendChild(btn);
+            });
+            
+            const chenziGroup = div.querySelector(`.chenzi-group`);
+            CHENZI_LIST.forEach(cz => {
+                const btn = document.createElement('button');
+                btn.className = 'btn btn-sm';
+                btn.innerText = cz;
+                btn.title = "襯字 (唔計入主幹字數)";
+                btn.onclick = () => insertToSentence(idx, cz);
+                chenziGroup.appendChild(btn);
+            });
+        });
+        
+        document.querySelectorAll('.wordcount-select').forEach(sel => {
+            sel.addEventListener('change', (e) => {
+                const idx = parseInt(sel.dataset.idx);
+                sentences[idx].wordCount = parseInt(sel.value);
+                updateSentenceStats(idx);
+                updateFinalText();
+                renderSentenceList();
+            });
+        });
+        
+        document.querySelectorAll('.del-sentence').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const idx = parseInt(btn.dataset.idx);
+                if (sentences.length <= 1) {
+                    alert("最少要保留一句！");
+                    return;
+                }
+                sentences.splice(idx, 1);
+                renderSentenceList();
+                updateFinalText();
+            });
+        });
+        
+        document.querySelectorAll('.sentence-input').forEach(txt => {
+            txt.addEventListener('input', (e) => {
+                const idx = parseInt(txt.dataset.idx);
+                sentences[idx].text = txt.value;
+                updateFinalText();
+                updateSentenceStats(idx);
+            });
+        });
+    }
+    
+    function insertToSentence(idx, word) {
+        if (idx >= sentences.length) return;
+        sentences[idx].text = sentences[idx].text + word;
+        const textarea = document.querySelector(`.sentence-input[data-idx="${idx}"]`);
+        if (textarea) textarea.value = sentences[idx].text;
+        updateFinalText();
+        updateSentenceStats(idx);
+    }
+    
+    function refreshVocab() {
+        renderSentenceList();
+        const hint = document.getElementById('herbHint');
+        hint.innerHTML = `🍵 當前「${herbSelect.value}」詞語已更新！每句下方詞語銀行已改變。`;
+        setTimeout(() => {
+            hint.innerHTML = `✨ 揀咗藥材，每句下方詞語銀行會自動更新！`;
+        }, 2000);
+    }
+    
+    function checkWork() {
+        const selectedRhyme = rhymeSelect.value;
+        const rhymeSet = new Set(rhymeDict[selectedRhyme] || []);
+        let errors = [];
+        for (let i = 0; i < sentences.length; i++) {
+            const sent = sentences[i];
+            const rawText = sent.text.trim();
+            const coreCount = getCoreWordCount(rawText);
+            const required = sent.wordCount;
+            if (coreCount !== required) {
+                errors.push(`第${i+1}句 主幹字數不符：現有 ${coreCount} 字，需要 ${required} 字 (襯字已自動過濾)。`);
+            }
+            const isEven = (i+1) % 2 === 0;
+            const isLast = (i === sentences.length-1);
+            if (isEven || isLast) {
+                if (coreCount === 0) {
+                    errors.push(`第${i+1}句(需押韻) 主幹冇內容，請至少寫出基礎字數嘅句子。`);
+                } else {
+                    const lastCoreChar = getCoreLastChar(rawText);
+                    if (!lastCoreChar || !rhymeSet.has(lastCoreChar)) {
+                        errors.push(`第${i+1}句 主幹結尾字「${lastCoreChar || '?'}」唔押【${selectedRhyme}韻】, 建議改用${Array.from(rhymeSet).slice(0,5).join('、')}`);
+                    }
+                }
+            }
+        }
+        if (errors.length === 0) {
+            alert("🎉 叻叻！主幹字數啱啱好，押韻又正確！可以跟住卜魚拍子讀白欖，加襯字更有味道！");
+        } else {
+            alert("⚠️ 需要修改：\n" + errors.join("\n"));
+        }
+    }
+    
+    function loadExample() {
+        sentences = [
+            { text: "百合呀，真係靚湯方", wordCount: 5 },
+            { text: "潤肺啦又清香", wordCount: 5 },
+            { text: "安神入睡香", wordCount: 5 },
+            { text: "養生呀永安康", wordCount: 5 }
+        ];
+        herbSelect.value = "百合";
+        rhymeSelect.value = "ong";
+        renderSentenceList();
+        updateFinalText();
+        alert("已載入示例 (百合主題，押 ong 韻)\n✨ 示範句中襯字：\n句1「百合呀，真係靚湯方」\n句2「潤肺啦又清香」\n句3無襯字\n句4「養生呀永安康」\n襯字加喺詞語之間，唔一定要句句有！");
+    }
+    
+    // ---- 聲音部分：修復自動節拍錯誤，增加穩定性 ----
+    let audioCtx = null;
+    let isMetronomeOn = false;
+    let metronomeInterval = null;
+    
+    // 初始化 AudioContext（必須由用戶手勢觸發 resume）
+    function initAudio() {
+        if (audioCtx) return audioCtx;
+        try {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            return audioCtx;
+        } catch(e) {
+            console.error("無法建立 AudioContext", e);
+            return null;
+        }
+    }
+    
+    // 播放卜魚聲音（安全版）
+    function playFishSound() {
+        try {
+            const ctx = initAudio();
+            if (!ctx) {
+                console.warn("AudioContext 不可用");
+                return;
+            }
+            // 確保 AudioContext 已激活（用戶點擊按鈕時會調用 resume）
+            const playBeep = () => {
+                const now = ctx.currentTime;
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.type = 'sine';
+                osc.frequency.value = 650;
+                gain.gain.setValueAtTime(0.28, now);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
+                osc.start();
+                osc.stop(now + 0.2);
+            };
+            if (ctx.state === 'suspended') {
+                ctx.resume().then(() => {
+                    playBeep();
+                }).catch(e => console.warn("AudioContext resume 失敗", e));
+            } else {
+                playBeep();
+            }
+        } catch(e) {
+            console.warn("播放卜魚聲音錯誤", e);
+        }
+    }
+    
+    // 啟動節拍器（先停止舊的，避免多個定時器）
+    function startMetronome() {
+        if (isMetronomeOn) {
+            stopMetronome();
+        }
+        const bpm = parseInt(document.getElementById('bpmSlider').value);
+        if (isNaN(bpm) || bpm <= 0) return;
+        const intervalMs = (60 / bpm) * 1000;
+        isMetronomeOn = true;
+        // 先確保 AudioContext 初始化並激活（預激活）
+        const ctx = initAudio();
+        if (ctx && ctx.state === 'suspended') {
+            ctx.resume().catch(e => console.warn("無法自動恢復 AudioContext", e));
+        }
+        metronomeInterval = setInterval(() => {
+            if (!isMetronomeOn) return;
+            playFishSound();
+        }, intervalMs);
+    }
+    
+    // 停止節拍器
+    function stopMetronome() {
+        if (metronomeInterval) {
+            clearInterval(metronomeInterval);
+            metronomeInterval = null;
+        }
+        isMetronomeOn = false;
+    }
+    
+    // 更新 BPM 顯示並在節拍器運行時重啟
+    function updateBpmAndRestart() {
+        const slider = document.getElementById('bpmSlider');
+        const val = slider.value;
+        document.getElementById('bpmValue').innerText = val + " BPM";
+        if (isMetronomeOn) {
+            startMetronome(); // 重啟以套用新 BPM
+        }
+    }
+    
+    function escapeHtml(str) {
+        return str.replace(/[&<>]/g, function(m) {
+            if(m === '&') return '&amp;';
+            if(m === '<') return '&lt;';
+            if(m === '>') return '&gt;';
+            return m;
+        });
+    }
+    
+    // 事件綁定與初始化
+    document.addEventListener('DOMContentLoaded', () => {
+        renderSentenceList();
+        updateFinalText();
+        
+        herbSelect.addEventListener('change', () => refreshVocab());
+        rhymeSelect.addEventListener('change', () => renderSentenceList());
+        document.getElementById('addSentenceBtn').addEventListener('click', () => {
+            sentences.push({ text: "新句子", wordCount: 5 });
+            renderSentenceList();
+            updateFinalText();
+        });
+        document.getElementById('checkWorkBtn').addEventListener('click', checkWork);
+        document.getElementById('loadExampleBtn').addEventListener('click', loadExample);
+        
+        // 單次卜魚按鈕
+        const fishBtn = document.getElementById('fishButton');
+        fishBtn.addEventListener('click', () => {
+            // 確保 AudioContext 可用並播放
+            const ctx = initAudio();
+            if (ctx && ctx.state === 'suspended') {
+                ctx.resume().then(() => playFishSound()).catch(e => console.warn);
+            } else {
+                playFishSound();
+            }
+        });
+        
+        // 節拍器按鈕
+        const metronomeStartBtn = document.getElementById('metronomeStart');
+        const metronomeStopBtn = document.getElementById('metronomeStop');
+        const bpmSlider = document.getElementById('bpmSlider');
+        
+        metronomeStartBtn.addEventListener('click', () => {
+            // 先確保 AudioContext 由用戶手勢激活
+            const ctx = initAudio();
+            if (ctx && ctx.state === 'suspended') {
+                ctx.resume().then(() => {
+                    startMetronome();
+                }).catch(e => console.warn);
+            } else {
+                startMetronome();
+            }
+        });
+        
+        metronomeStopBtn.addEventListener('click', () => {
+            stopMetronome();
+        });
+        
+        bpmSlider.addEventListener('input', (e) => {
+            document.getElementById('bpmValue').innerText = e.target.value + " BPM";
+            if (isMetronomeOn) {
+                startMetronome(); // 重啟套用新節奏
+            }
+        });
+    });
+</script>
+</body>
+</html>
